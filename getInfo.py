@@ -109,7 +109,7 @@ if __name__ == "__main__":
     start_date = input("Enter start date (YYYY-MM-DD): ")
     end_date = input("Enter end date (YYYY-MM-DD): ")
     
-    get_stock_price_timeline(symbol, start_date, end_date)
+    print(get_stock_price_timeline(symbol, start_date, end_date))
     #fluctuation_data = get_stock_fluctuation(symbol, start_date, end_date)
     #print(fluctuation_data)
 
