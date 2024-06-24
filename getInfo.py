@@ -6,6 +6,8 @@ from alpaca.trading.client import TradingClient
 from alpaca.trading.requests import MarketOrderRequest
 from textblob import TextBlob
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+from datetime import date
+from dateutil.relativedelta import relativedelta
 
 API_KEY = "PK7SZ5XKK9HFLRTQOXBK"
 API_SECRET = "bPeyZwIPI8dDQYeJySMA6EcqjSzRQJ6eV3T1PlCy"
@@ -106,9 +108,12 @@ def get_news_sentiment(symbol):
 
 if __name__ == "__main__":
     symbol = input("Enter stock symbol: ")
-    start_date = input("Enter start date (YYYY-MM-DD): ")
-    end_date = input("Enter end date (YYYY-MM-DD): ")
-    
+    end_date = date.today()
+# Subtract 6 months from the start date
+    start_date = end_date - relativedelta(months=6)
+
+
+    print(end_date)   
     print(get_stock_price_timeline(symbol, start_date, end_date))
     #fluctuation_data = get_stock_fluctuation(symbol, start_date, end_date)
     #print(fluctuation_data)
