@@ -109,7 +109,7 @@ def get_news_sentiment(symbol):
 if __name__ == "__main__":
     symbol = input("Enter stock symbol: ")
     end_date = date.today()
-# Subtract 6 months from the start date
+    # Subtract 6 months from the start date
     start_date = end_date - relativedelta(months=6)
 
 

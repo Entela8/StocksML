@@ -1,0 +1,31 @@
+{
+  "name": "stocksml",
+  "version": "1.0.0",
+  "description": "Stock Machine Learning tool",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/app",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Entela8/StocksML.git"
+  },
+  "keywords": [
+    "Stocks",
+    "Machine",
+    "Learning"
+  ],
+  "author": "Entela Mema",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Entela8/StocksML/issues"
+  },
+  "homepage": "https://github.com/Entela8/StocksML#readme",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "nodemon": "^3.1.4"
+  }
+}
