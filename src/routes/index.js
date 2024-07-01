@@ -1,8 +1,11 @@
 import express from 'express'
-import HelloController from '../controllers/helloController.js'
-const router = express.Router()
-const helloController = new HelloController()
+import SearchController from '../controllers/searchController.js'
 
-router.get('/hello', helloController.hello)
+const router = express.Router()
+const searchController = new SearchController()
+
+router.get('/', searchController.renderSearch)
+
+router.get('/search', searchController.searchStock)
 
 export default router 
