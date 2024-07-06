@@ -5,30 +5,33 @@ import json
 import sys
 
 def get_stock_fluctuation(symbol):
-    end_date = date.today()
-    start_date = end_date - relativedelta(months=6)
+    try:
+        end_date = date.today()
+        start_date = end_date - relativedelta(months=6)
 
-    stock_data = yf.download(symbol, start=start_date, end=end_date)
+        stock_data = yf.download(symbol, start=start_date, end=end_date, progress=False)
 
-    # Check if data is empty
-    if stock_data.empty:
-        return {"error": f"No data found for {symbol} from {start_date} to {end_date}"}
+        # Check if data is empty
+        if stock_data.empty:
+            return {"error": f"No data found for {symbol} from {start_date} to {end_date}"}
 
-    # Calculate the price fluctuation
-    start_price = stock_data['Close'].iloc[0]
-    end_price = stock_data['Close'].iloc[-1]
-    fluctuation = end_price - start_price
-    fluctuation_percentage = (fluctuation / start_price) * 100
+        # Calculate the price fluctuation
+        start_price = stock_data['Close'].iloc[0]
+        end_price = stock_data['Close'].iloc[-1]
+        fluctuation = end_price - start_price
+        fluctuation_percentage = (fluctuation / start_price) * 100
 
-    return {
-        "symbol": symbol,
-        "start_date": str(start_date),
-        "end_date": str(end_date),
-        "start_price": start_price,
-        "end_price": end_price,
-        "fluctuation": fluctuation,
-        "fluctuation_percentage": fluctuation_percentage
-    }
+        return {
+            "symbol": symbol,
+            "start_date": str(start_date),
+            "end_date": str(end_date),
+            "start_price": start_price,
+            "end_price": end_price,
+            "fluctuation": fluctuation,
+            "fluctuation_percentage": fluctuation_percentage
+        }
+    except Exception as e:
+        return {"error": str(e)}
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
@@ -36,6 +39,10 @@ if __name__ == "__main__":
         sys.exit(1)
 
     data = json.loads(sys.argv[1])
-    symbol = data["stockName"]
+    symbol = data.get("stockName")
+    if not symbol:
+        print(json.dumps({"error": "Missing 'stockName' in input"}))
+        sys.exit(1)
+
     result = get_stock_fluctuation(symbol)
     print(json.dumps(result))
