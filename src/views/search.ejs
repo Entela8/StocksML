@@ -3,19 +3,98 @@
 <head>
     <link href="/style/style.css" rel="stylesheet" type="text/css">
     <title>Search Results</title>
+    <link href="https://cdn.syncfusion.com/ej2/26.1.35/material.css" rel="stylesheet">
+    <script src="https://cdn.syncfusion.com/ej2/26.1.35/dist/ej2.min.js" type="text/javascript"></script>
+    <script src="https://cdn.syncfusion.com/ej2/syncfusion-helper.js" type="text/javascript"></script>
 </head>
 
 <body>
     <h1>Search Results</h1>
     
-    <h3><%= result.symbol %></h3>
-    <h4><%= result.start_date %></h4>
-    <h4><%= result.end_date %></h4>
-    <h4><%= result.start_price %></h4>
-    <h4><%= result.end_price %></h4>
-    <h4><%= result.fluctuation %></h4>
-    <h4><%= result.fluctuation_percentage %></h4>
+    <h3><b>Symbol</b>: <%= result.symbol %></h3>
+    <h4>Start: <%= result.start_date %>       End:<%= result.end_date %></h4>
+    <h4>Starting price: <%= result.start_price %></h4>
+    <h4>Ending price: <%= result.end_price %></h4>
+    <h4>Fluctuation: <%= result.fluctuation %></h4>
+    <h4>Fluctuation percentage: <%= result.fluctuation_percentage %></h4>
+    
+    <!-- Container for the chart -->
+     <div id="container" style="height: 400px; width: 100%;"></div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var ele = document.getElementById('container');
+            if (ele) {
+                ele.style.visibility = "visible";
+            }
+
+            // Parse stock data and prepare it for the chart
+            const stockData = <%- JSON.stringify(result.stock_data) %>;
+                        
+            // Format stock data for EJ2 Candle Chart
+            const formattedData = stockData.map(item => ({
+                x: new Date(item.Date),
+                open: item.Open,
+                high: item.High,
+                low: item.Low,
+                close: item.Close,
+            }));
+
+            // Render the Candle Chart
+            var chart = new ej.charts.Chart({
+                primaryXAxis: {
+                    valueType: 'DateTime',
+                    title: 'Date'
+                },
+                primaryYAxis: {
+                    title: 'Price',
+                    labelFormat: '${value}'
+                },
+                series: [{
+                    dataSource: formattedData,
+                    xName: 'x',
+                    yName: 'close',
+                    name: '<%= result.symbol %>',
+                    type: 'Candle',
+                    animation: { enable: true },
+                    low: 'low',
+                    high: 'high',
+                    open: 'open',
+                    close: 'close',
+                }],
+                title: 'Stock Price Analysis',
+                tooltip: { enable: true },
+            });
+            chart.appendTo('#container');
+        });
+    </script>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Open</th>
+                <th>High</th>
+                <th>Low</th>
+                <th>Close</th>
+                <th>Adj Close</th>
+                <th>Volume</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <% result.stock_data.forEach(item => { %>
+                <tr>
+                    <td><%= item.Date %></td>
+                    <td><%= item.Open %></td>
+                    <td><%= item.High %></td>
+                    <td><%= item.Low %></td>
+                    <td><%= item.Close %></td>
+                    <td><%= item["Adj Close"] %></td>
+                    <td><%= item.Volume %></td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
 
 
 </body>

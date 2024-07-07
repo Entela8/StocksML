@@ -7,7 +7,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 class SearchController {
 
-    searchStock = async (req, res) => {
+    searchFluctuationStock = async (req, res) => {
         const stockName = req.query.stockName;
         const scriptPath = join(__dirname, '../scripts', 'stockFluctuation.py');
 
@@ -21,10 +21,6 @@ class SearchController {
         const result = pythonProcess.stdout?.toString()?.trim();
         const error = pythonProcess.stderr?.toString()?.trim();
         const exitCode = pythonProcess.status;
-
-        console.log('Python script output:', result);
-        console.log('Python script error output:', error);
-        console.log('Python script exit code:', exitCode);
 
         if (exitCode !== 0) {
             res.status(500).send({ status: 500, message: 'Python script execution error', details: error });

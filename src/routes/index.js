@@ -6,6 +6,6 @@ const searchController = new SearchController()
 
 router.get('/', searchController.renderSearch)
 
-router.get('/search', searchController.searchStock)
+router.get('/search', searchController.searchFluctuationStock)
 
 export default router 

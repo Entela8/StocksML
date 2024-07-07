@@ -1,8 +1,14 @@
 from datetime import date
 from dateutil.relativedelta import relativedelta
+import pandas as pd
 import yfinance as yf
 import json
 import sys
+
+pd.set_option('display.max_rows', None)
+pd.set_option('display.max_columns', None)
+pd.set_option('display.width', None)
+pd.set_option('display.max_colwidth', None)
 
 def get_stock_fluctuation(symbol):
     try:
@@ -21,6 +27,10 @@ def get_stock_fluctuation(symbol):
         fluctuation = end_price - start_price
         fluctuation_percentage = (fluctuation / start_price) * 100
 
+        stock_data.reset_index(inplace=True)
+        stock_data['Date'] = stock_data['Date'].astype(str)
+        stock_data_dict = stock_data.to_dict(orient='records')
+
         return {
             "symbol": symbol,
             "start_date": str(start_date),
@@ -28,7 +38,8 @@ def get_stock_fluctuation(symbol):
             "start_price": start_price,
             "end_price": end_price,
             "fluctuation": fluctuation,
-            "fluctuation_percentage": fluctuation_percentage
+            "fluctuation_percentage": fluctuation_percentage,
+            "stock_data": stock_data_dict
         }
     except Exception as e:
         return {"error": str(e)}
