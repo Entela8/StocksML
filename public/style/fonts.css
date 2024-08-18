@@ -1,25 +1,23 @@
-/* app.css */
-
-/* Apply the regular font to the entire body */
-body {
+/* fonts.css */
+.rem-regular {
     font-family: "REM", sans-serif;
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
 }
 
-/* Apply the bold font to all headings */
-h1, h2, h3 {
+.rem-bold {
     font-family: "REM", sans-serif;
     font-optical-sizing: auto;
     font-weight: 700;
     font-style: normal;
 }
 
-/* Apply light font to paragraph elements */
-p, h4 {
+.rem-light {
     font-family: "REM", sans-serif;
     font-optical-sizing: auto;
     font-weight: 300;
     font-style: normal;
 }
+
+/* Add more styles as needed */

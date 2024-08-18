@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=REM:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link href="/style/style.css" rel="stylesheet" type="text/css">
     <title>Search Results</title>
     <link href="https://cdn.syncfusion.com/ej2/26.1.35/material.css" rel="stylesheet">
@@ -12,11 +15,11 @@
     <h1>Search Results</h1>
     
     <h3><b>Symbol</b>: <%= result.symbol %></h3>
-    <h4>Start: <%= result.start_date %>       End:<%= result.end_date %></h4>
-    <h4>Starting price: <%= result.start_price %></h4>
-    <h4>Ending price: <%= result.end_price %></h4>
-    <h4>Fluctuation: <%= result.fluctuation %></h4>
-    <h4>Fluctuation percentage: <%= result.fluctuation_percentage %></h4>
+    <h4><b>Start</b>: <%= result.start_date %>       End:<%= result.end_date %></h4>
+    <h4><b>Starting price</b>: <%= result.start_price %></h4>
+    <h4><b>Ending price</b>: <%= result.end_price %></h4>
+    <h4><b>Fluctuation</b>: <%= result.fluctuation %></h4>
+    <h4><b>Fluctuation percentage</b>: <%= result.fluctuation_percentage %></h4>
     
     <!-- Container for the chart -->
      <div id="container" style="height: 600px; width: 100%;"></div>
@@ -57,7 +60,7 @@
                     labelFormat: '${value}',
                     minimum: minPrice,
                     maximum: maxPrice,
-                    interval: (maxPrice - minPrice) / 5 // Adjust interval as needed
+                    interval: (maxPrice - minPrice) / 2 // Adjust interval as needed
                 },
                 series: [{
                     dataSource: formattedData,
@@ -66,6 +69,8 @@
                     name: '<%= result.symbol %>',
                     type: 'Candle',
                     animation: { enable: true },
+                    bearFillColor: 'red',
+                    bullFillColor: 'green',
                     low: 'low',
                     high: 'high',
                     open: 'open',
