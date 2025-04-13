@@ -19,7 +19,6 @@ class SearchController {
         ]);
 
         const result = pythonProcess.stdout?.toString()?.trim();
-        console.dir(result)
         const error = pythonProcess.stderr?.toString()?.trim();
         const exitCode = pythonProcess.status;
 
