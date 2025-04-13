@@ -19,6 +19,7 @@ class SearchController {
         ]);
 
         const result = pythonProcess.stdout?.toString()?.trim();
+        console.dir(result)
         const error = pythonProcess.stderr?.toString()?.trim();
         const exitCode = pythonProcess.status;
 
@@ -37,7 +38,7 @@ class SearchController {
             res.render('search', { result: resultParsed });
         } catch (e) {
             console.error('Failed to parse JSON:', e, result);
-            res.status(500).send({ status: 500, message: 'Server error', details: 'Failed to parse JSON' });
+            res.status(500).send({ status: 500, message: 'Server error', details: e.error });
         }
     }
 
