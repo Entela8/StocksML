@@ -16,10 +16,11 @@
     
     <h3><b>Symbol</b>: <%= result.symbol %></h3>
     <h4><b>Start</b>: <%= result.start_date %>       End:<%= result.end_date %></h4>
-    <h4><b>Starting price</b>: <%= result.start_price %></h4>
-    <h4><b>Ending price</b>: <%= result.end_price %></h4>
-    <h4><b>Fluctuation</b>: <%= result.fluctuation %></h4>
-    <h4><b>Fluctuation percentage</b>: <%= result.fluctuation_percentage %></h4>
+    <h4><b>Starting price</b>: <%= Math.round(result.start_price) %></h4>
+    <h4><b>Ending price</b>: <%= Math.round(result.end_price) %></h4>
+    <h4><b>Fluctuation</b>: <%= Math.round(result.fluctuation) %></h4>
+    <h4><b>Fluctuation percentage</b>: <%= Math.round(result.fluctuation_percentage) %>%</h4>
+    
     
     <!-- Container for the chart -->
      <div id="container" style="height: 600px; width: 100%;"></div>
@@ -35,7 +36,13 @@
             const stockData = <%- JSON.stringify(result.stock_data) %>;
 
             // Find the min and max values for the y-axis range
-            const prices = stockData.flatMap(item => [item.Open, item.High, item.Low, item.Close]);
+            const prices = stockData.flatMap(item => [
+                Math.round(item.Open),
+                Math.round(item.High),
+                Math.round(item.Low),
+                Math.round(item.Close)
+            ]);
+
             const minPrice = Math.min(...prices);
             const maxPrice = Math.max(...prices);
             const padding = (maxPrice - minPrice) * 0.1; // 10% padding
@@ -43,11 +50,12 @@
             // Format stock data for EJ2 Candle Chart
             const formattedData = stockData.map(item => ({
                 x: new Date(item.Date),
-                open: item.Open,
-                high: item.High,
-                low: item.Low,
-                close: item.Close,
+                open: Math.round(item.Open),
+                high: Math.round(item.High),
+                low: Math.round(item.Low),
+                close: Math.round(item.Close),
             }));
+
 
             // Render the Candle Chart
             var chart = new ej.charts.Chart({
@@ -83,7 +91,7 @@
         });
     </script>
 
-    <table border="1">
+    <table border="1" style="margin: auto; text-align: center; margin-top: 60px;">
         <thead>
             <tr>
                 <th>Date</th>
@@ -91,7 +99,6 @@
                 <th>High</th>
                 <th>Low</th>
                 <th>Close</th>
-                <th>Adj Close</th>
                 <th>Volume</th>
             </tr>
         </thead>
@@ -100,15 +107,15 @@
             <% result.stock_data.forEach(item => { %>
                 <tr>
                     <td><%= item.Date %></td>
-                    <td><%= item.Open %></td>
-                    <td><%= item.High %></td>
-                    <td><%= item.Low %></td>
-                    <td><%= item.Close %></td>
-                    <td><%= item["Adj Close"] %></td>
-                    <td><%= item.Volume %></td>
+                    <td><%= Math.round(item.Open) %></td>
+                    <td><%= Math.round(item.High) %></td>
+                    <td><%= Math.round(item.Low) %></td>
+                    <td><%= Math.round(item.Close) %></td>
+                    <td><%= Math.round(item.Volume) %></td>
                 </tr>
             <% }) %>
         </tbody>
+        
     </table>
 
 
