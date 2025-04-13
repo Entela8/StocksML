@@ -23,9 +23,9 @@
     
     
     <!-- Container for the chart -->
-     <div id="container" style="height: 600px; width: 100%;"></div>
+    <div id="container" style="height: 600px; width: 100%;"></div>
 
-     <script>
+    <script>
         document.addEventListener('DOMContentLoaded', function () {
             var ele = document.getElementById('container');
             if (ele) {
@@ -35,7 +35,6 @@
             // Parse stock data and prepare it for the chart
             const stockData = <%- JSON.stringify(result.stock_data) %>;
 
-            // Find the min and max values for the y-axis range
             const prices = stockData.flatMap(item => [
                 Math.round(item.Open),
                 Math.round(item.High),
@@ -45,9 +44,7 @@
 
             const minPrice = Math.min(...prices);
             const maxPrice = Math.max(...prices);
-            const padding = (maxPrice - minPrice) * 0.1; // 10% padding
 
-            // Format stock data for EJ2 Candle Chart
             const formattedData = stockData.map(item => ({
                 x: new Date(item.Date),
                 open: Math.round(item.Open),
@@ -55,7 +52,6 @@
                 low: Math.round(item.Low),
                 close: Math.round(item.Close),
             }));
-
 
             // Render the Candle Chart
             var chart = new ej.charts.Chart({
@@ -68,7 +64,7 @@
                     labelFormat: '${value}',
                     minimum: minPrice,
                     maximum: maxPrice,
-                    interval: (maxPrice - minPrice) / 2 // Adjust interval as needed
+                    interval: (maxPrice - minPrice) / 2
                 },
                 series: [{
                     dataSource: formattedData,
@@ -88,8 +84,35 @@
                 tooltip: { enable: true },
             });
             chart.appendTo('#container');
+
+            // 📰 Handle News Sentiment
+            const newsData = <%- JSON.stringify(result.news_sentiment) %>;
+
+            const getSentimentSymbol = (value) => {
+                if (value > 0.2) return "🟢";
+                if (value < -0.2) return "🔴";
+                return "🟡";
+            };
+
+            const newsTable = document.getElementById('news-table-body');
+
+            newsData.forEach(article => {
+                const row = document.createElement('tr');
+
+                const sentiment = article.vader_sentiment ?? article.textblob_sentiment ?? 0;
+                const sentimentSymbol = getSentimentSymbol(sentiment);
+
+                row.innerHTML = `
+                    <td>${sentimentSymbol}</td>
+                    <td><b>${article.headline}</b></td>
+                    <td>${article.content || 'N/A'}</td>
+                    <td>${sentiment.toFixed(2)}</td>
+                `;
+                newsTable.appendChild(row);
+            });
         });
     </script>
+
 
     <table border="1" style="margin: auto; text-align: center; margin-top: 60px;">
         <thead>
@@ -118,6 +141,38 @@
         
     </table>
 
+    <h2 style="text-align: center; margin-top: 60px;">News Sentiment Analysis</h2>
+
+    <table border="1" style="margin: auto; text-align: center; width: 80%; margin-top: 20px; margin-bottom: 30px;">
+        <thead>
+            <tr>
+                <th>Headline</th>
+                <th>Content</th>
+                <th>TextBlob Sentiment</th>
+                <th>VADER Sentiment</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <% result.news_sentiment.forEach(news => { 
+                let color = '';
+                if (news.vader_sentiment > 0.2) {
+                    color = 'background-color: #d4edda'; // green
+                } else if (news.vader_sentiment < -0.2) {
+                    color = 'background-color: #f8d7da'; // red
+                } else {
+                    color = 'background-color: #fff3cd'; // yellow
+                }
+            %>
+                <tr style="<%= color %>">
+                    <td><%= news.headline %></td>
+                    <td><%= news.content || 'No content' %></td>
+                    <td><%= news.textblob_sentiment.toFixed(3) %></td>
+                    <td><%= news.vader_sentiment.toFixed(3) %></td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
 
 </body>
 
